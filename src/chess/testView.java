@@ -1,26 +1,20 @@
 package chess;
 
-public class Game {
-
+public class testView {
+	
 	Model model;
 	Controller controller;
 	View view;
 	
-	Game() {
+	testView() {
 		model = new Model();
 		controller = new Controller();
+		
 		view = new View();
-		
-		// initialise the game
-		model.initialise(view, controller);
-		controller.initialise(model, view);
 		view.initialise(model, controller);
-		
-		// start game 
-		controller.startup();
 	}
-	
+
 	public static void main(String[] args) {
-		new Game();
+		new testView();
 	}
 }
