@@ -6,15 +6,17 @@ public class testView {
 	Controller controller;
 	View view;
 	
-	testView() {
+	testView(){
 		model = new Model();
+		model.initialise(view, controller);
 		controller = new Controller();
 		
 		view = new View();
 		view.initialise(model, controller);
+		view.refresh();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		new testView();
 	}
 }
