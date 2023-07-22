@@ -24,15 +24,27 @@ public class Piece {
 	}
 	
 	public void move(int xp, int yp) {
-		for(Piece p: ps) {
-			if(p.getXp()==xp&&p.getYp()==yp) {
-				p.kill();
+		if(valid(xp, yp)) {
+			for(Piece p: ps) {
+				if(p.getXp()==xp&&p.getYp()==yp) {
+					System.out.println("killing "+p.getName());
+					p.kill();
+					break;
+				}
 			}
+			this.xp=xp;
+			this.yp=yp;
+			x=xp*64;
+			y=yp*64;
+		}else {
+			x=this.xp*64;
+			y=this.yp*64;
+			return;
 		}
-		this.xp=xp;
-		this.yp=yp;
-		x=xp*64;
-		y=yp*64;
+	}
+	
+	public boolean valid(int xp, int yp) {
+		return true;
 	}
 	
 	public void kill() {ps.remove(this);}

@@ -2,9 +2,7 @@ package chess;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,8 +10,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import pieces.Piece;
@@ -95,12 +91,28 @@ public class Board extends JPanel {
 			if(!p.white()) {
 				ind+=6;
 			}
-			g.drawImage(imgs[ind], p.getX(), p.getY(), this);
+			if(invert) {
+				g.drawImage(imgs[ind], p.getX(), invertY(p.getY()), this);
+				System.out.println(p.getY()+" has been inverted to "+invertY(p.getY()));
+			}else {
+				g.drawImage(imgs[ind], p.getX(), p.getY(), this);
+			}
 			
 		}
 	}
 	
-	public Dimension getPreferredSize() {
-		return new Dimension(DIM_WIDTH, DIM_HEIGHT);
+	public int invertY(int y) {
+		if(y<255)
+			y=255+(255-y);
+		else if(y>255)
+			y=255-(y-255);
+		return y;
 	}
+	
+	public boolean isBetween(int num, int lower, int higher) {
+		return lower <= num && num <= higher;
+	}
+	
+	public Dimension getPreferredSize() {return new Dimension(DIM_WIDTH, DIM_HEIGHT);}
+	public Boolean isInverted() {return invert;}
 }

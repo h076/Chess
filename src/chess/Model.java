@@ -51,6 +51,10 @@ public class Model {
 		for(int x=0; x<8; x++)
 			new Pawn(x,1,false,ps);
 		
+		//test pieces
+		//new Pawn(0,0,false,ps);
+		//new Pawn(0,7,true,ps);
+		
 		//initialise the boards
 		bs[0] = new Board(ps, false);
 		bs[1] = new Board(ps, true);
@@ -60,8 +64,13 @@ public class Model {
 				@Override
 				public void mouseDragged(MouseEvent e) {
 					if(selectedPiece!=null) {
-						selectedPiece.setX(e.getX()-32);
-						selectedPiece.setY(e.getY()-32);
+						if(b.isInverted()) {
+							selectedPiece.setX(e.getX()-32);
+							selectedPiece.setY(e.getY()-32);
+						}else {
+							selectedPiece.setX(e.getX()-32);
+							selectedPiece.setY(e.getY()-32);
+						}
 						b.repaint();
 					}
 				}
@@ -72,13 +81,29 @@ public class Model {
 			b.addMouseListener( new MouseListener() {
 				@Override
 				public void mousePressed(MouseEvent e) {
-					selectedPiece = getPiece(e.getX(), e.getY());
+					System.out.println("pressed at "+e.getX()+","+e.getY());
+					if(b.isInverted()) {
+						selectedPiece = getPiece(e.getX(), invertY(e.getY()));
+						System.out.println("selected piece is "+ selectedPiece.getName() +" and is " +selectedPiece.white());
+					}else {
+						selectedPiece = getPiece(e.getX(), e.getY());
+						System.out.println("selected piece is "+ selectedPiece.getName() +" and is " +selectedPiece.white());
+					}
 				}
 				
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					selectedPiece.move(e.getX()/64, e.getY()/64);
-					b.repaint();
+					if(selectedPiece!=null) {
+						if(b.isInverted()) {
+							System.out.println("moved to postion: "+(e.getX()/64)+","+(e.getY()/64));
+							selectedPiece.move(e.getX()/64, invertY(e.getY())/64);
+						}else {
+							System.out.println("moved to postion: "+(e.getX()/64)+","+(invertY(e.getY())/64));
+							selectedPiece.move(e.getX()/64, e.getY()/64);
+						}
+						bs[0].repaint();
+						bs[1].repaint();
+					}
 				}
 				
 				@Override
@@ -99,6 +124,31 @@ public class Model {
 			}
 		}
 		return null;
+	}
+	
+	public int invertY(int y) {
+		if(isBetween(y,0,63)) {
+			y=y+448;
+		}else if(isBetween(y,448,511)) {
+			y=y-448;
+		}else if(isBetween(y,64,127)) {
+			y=y+320;
+		}else if(isBetween(y,384,447)) {
+			y=y-320;
+		}else if(isBetween(y,128,191)) {
+			y=y+192;
+		}else if(isBetween(y,320,383)) {
+			y=y-192;
+		}else if(isBetween(y,192,255)) {
+			y=y+64;
+		}else if(isBetween(y,256,319)) {
+			y=y-64;
+		}
+		return y;
+	}
+	
+	public boolean isBetween(int num, int lower, int higher) {
+		return lower <= num && num <= higher;
 	}
 	
 	public int numOfPieces() {return ps.size();}
