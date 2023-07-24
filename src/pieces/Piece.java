@@ -47,6 +47,15 @@ public class Piece {
 		return true;
 	}
 	
+	public Boolean isPiece(int x, int y) {
+		for(Piece p : ps) {
+			if(p.getXp()==(x/64) && p.getYp()==(y/64)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void kill() {ps.remove(this);}
 	
 	public String getName() {return null;}

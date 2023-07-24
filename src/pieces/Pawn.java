@@ -14,13 +14,23 @@ public class Pawn extends Piece{
 	@Override
 	public boolean valid(int xp, int yp) {
 		if(this.xp==xp) {
+			if((isPiece(xp,this.yp-1) && isWhite) || (isPiece(xp,this.yp+1) && !isWhite)) {
+				int dif = yp-this.yp;
+				if((dif<0 && isWhite) || (dif>0 && !isWhite)) {
+					dif = Math.abs(dif);
+					if(dif==2 && (this.yp==1 || this.yp==6))
+						return true;
+					if(dif==1)
+						return true;
+				}
+			}
+		}else if((this.xp == xp-1) || (this.xp == xp+1)) {
 			int dif = yp-this.yp;
 			if((dif<0 && isWhite) || (dif>0 && !isWhite)) {
 				dif = Math.abs(dif);
-				if(dif==2 && (this.yp==1 || this.yp==6))
+				if(dif==1 && isPiece(xp,yp)) {
 					return true;
-				if(dif==1)
-					return true;
+				}
 			}
 		}
 		return false;

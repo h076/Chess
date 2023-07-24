@@ -29,7 +29,7 @@ public class Board extends JPanel {
 		this.ps = ps;
 		this.invert = invert;
 		
-		// cut and save piece images
+		// Cut and save piece images from png.
 		BufferedImage all = null;
 		try {
 			all = ImageIO.read(new File("/home/harryub/Documents/Java/Chess/src/chess.png"));
@@ -37,6 +37,8 @@ public class Board extends JPanel {
 			System.out.println("Failed to load icons");
 			e.printStackTrace();
 		}
+		
+		// Store all sub-images in image array.
 		int ind=0;
 		for(int y=0; y<400; y+=200) {
 			for(int x=0; x<1200; x+=200) {
@@ -49,6 +51,7 @@ public class Board extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
+		// Paint board using dimensions and square size.
 		for(int i=0; i<DIM_HEIGHT; i+=SQ_SIZE) {
 			if(white) {
 				white=!white;
@@ -68,6 +71,10 @@ public class Board extends JPanel {
 			}
 		}
 		
+		// Loop through Pieces linked list ps.
+		// Each piece name is compared in the conditional statements,
+		// an index is given for p which corresponds to its image in imgs array.
+		// Each piece is then drawn onto the board using g.drawImage.
 		for(Piece p : ps) {
 			int ind = 0;
 			if(p.getName()=="King") {
@@ -91,26 +98,50 @@ public class Board extends JPanel {
 			if(!p.white()) {
 				ind+=6;
 			}
+			
+			// If the board is inverted (black player) then the pieces Y Board position is inverted.
 			if(invert) {
-				g.drawImage(imgs[ind], p.getX(), invertY(p.getY()), this);
-				System.out.println(p.getY()+" has been inverted to "+invertY(p.getY()));
+				int y=p.getYp();
+				switch(y) {
+					case 0:
+						y=7;
+						break;
+					case 7:
+						y=0;
+						break;
+					case 1:
+						y=6;
+						break;
+					case 6:
+						y=1;
+						break;
+					case 2:
+						y=5;
+						break;
+					case 5:
+						y=2;
+						break;
+					case 3:
+						y=4;
+						break;
+					case 4:
+						y=3;
+						break;
+				}
+				
+				// This condition will catch out a piece that is being moved by the player.
+				if(p.getY()%64 != 0) {
+					// If a piece is currently being moved then we cannot just invert its Y board position,
+					// instead we will get its true Y co-ordinate and invert this to follow the mouse.
+					g.drawImage(imgs[ind], p.getX(), Model.invertY(p.getY()), this);
+				}else {
+					g.drawImage(imgs[ind], p.getX(), y*64, this);
+				}
 			}else {
 				g.drawImage(imgs[ind], p.getX(), p.getY(), this);
 			}
 			
 		}
-	}
-	
-	public int invertY(int y) {
-		if(y<255)
-			y=255+(255-y);
-		else if(y>255)
-			y=255-(y-255);
-		return y;
-	}
-	
-	public boolean isBetween(int num, int lower, int higher) {
-		return lower <= num && num <= higher;
 	}
 	
 	public Dimension getPreferredSize() {return new Dimension(DIM_WIDTH, DIM_HEIGHT);}

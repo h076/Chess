@@ -66,7 +66,9 @@ public class Model {
 					if(selectedPiece!=null) {
 						if(b.isInverted()) {
 							selectedPiece.setX(e.getX()-32);
-							selectedPiece.setY(e.getY()-32);
+							selectedPiece.setY(invertY(e.getY())+32);
+							if((invertY(e.getY())+32)%64 == 0)
+								return;
 						}else {
 							selectedPiece.setX(e.getX()-32);
 							selectedPiece.setY(e.getY()-32);
@@ -126,24 +128,11 @@ public class Model {
 		return null;
 	}
 	
-	public int invertY(int y) {
-		if(isBetween(y,0,63)) {
-			y=y+448;
-		}else if(isBetween(y,448,511)) {
-			y=y-448;
-		}else if(isBetween(y,64,127)) {
-			y=y+320;
-		}else if(isBetween(y,384,447)) {
-			y=y-320;
-		}else if(isBetween(y,128,191)) {
-			y=y+192;
-		}else if(isBetween(y,320,383)) {
-			y=y-192;
-		}else if(isBetween(y,192,255)) {
-			y=y+64;
-		}else if(isBetween(y,256,319)) {
-			y=y-64;
-		}
+	public static int invertY(int y) {
+		if(y<255)
+			y=255+(255-y);
+		else if(y>255)
+			y=255-(y-255);
 		return y;
 	}
 	
