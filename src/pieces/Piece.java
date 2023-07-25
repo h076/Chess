@@ -49,8 +49,18 @@ public class Piece {
 	
 	public Boolean isPiece(int x, int y) {
 		for(Piece p : ps) {
-			if(p.getXp()==(x/64) && p.getYp()==(y/64)) {
+			if(p.getXp()==x && p.getYp()==y) {
 				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Boolean isPieceWhite(int x, int y) {
+		for(Piece p : ps) {
+			if(p.getXp()==x && p.getYp()==y) {
+				if(p.white())
+					return true;
 			}
 		}
 		return false;

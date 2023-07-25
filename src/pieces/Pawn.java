@@ -14,7 +14,7 @@ public class Pawn extends Piece{
 	@Override
 	public boolean valid(int xp, int yp) {
 		if(this.xp==xp) {
-			if((isPiece(xp,this.yp-1) && isWhite) || (isPiece(xp,this.yp+1) && !isWhite)) {
+			if((!isPiece(this.xp,this.yp-1) && isWhite) || (!isPiece(this.xp,this.yp+1) && !isWhite)) {
 				int dif = yp-this.yp;
 				if((dif<0 && isWhite) || (dif>0 && !isWhite)) {
 					dif = Math.abs(dif);
@@ -28,7 +28,7 @@ public class Pawn extends Piece{
 			int dif = yp-this.yp;
 			if((dif<0 && isWhite) || (dif>0 && !isWhite)) {
 				dif = Math.abs(dif);
-				if(dif==1 && isPiece(xp,yp)) {
+				if((dif==1 && isPiece(xp,yp)) && (isPieceWhite(xp,yp) != isWhite)) {
 					return true;
 				}
 			}
