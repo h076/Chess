@@ -1,5 +1,6 @@
 package pieces;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Piece {
@@ -64,6 +65,19 @@ public class Piece {
 			}
 		}
 		return false;
+	}
+	
+	public boolean checkPath(int [] location, int [] end, int [] direction) {
+		location[0] += direction[0];
+		location[1] += direction[1];
+		while(!Arrays.equals(location, end)) {
+			if(isPiece(location[0],location[1])) {
+				return false;
+			}
+			location[0] += direction[0];
+			location[1] += direction[1];
+		}
+		return true;
 	}
 	
 	public void kill() {ps.remove(this);}
