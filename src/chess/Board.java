@@ -25,9 +25,10 @@ public class Board extends JPanel {
 	LinkedList<Piece> ps;
 	Boolean invert;
 	
-	public Board(LinkedList<Piece> ps, Boolean invert) {
+	public Board(LinkedList<Piece> ps, Boolean white) {
 		this.ps = ps;
-		this.invert = invert;
+		this.white = white;
+		this.invert = !white;
 		
 		// Cut and save piece images from png.
 		BufferedImage all = null;
@@ -146,4 +147,5 @@ public class Board extends JPanel {
 	
 	public Dimension getPreferredSize() {return new Dimension(DIM_WIDTH, DIM_HEIGHT);}
 	public Boolean isInverted() {return invert;}
+	public Boolean white() {return white;}
 }

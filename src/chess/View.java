@@ -17,7 +17,7 @@ public class View {
 	
 	public void initialise(){
 		this.model = new Model();
-		bs = model.initialise();
+		bs = model.initialise(this);
 		
 		JButton resign1 = new JButton("Resign");
 		JButton resign2 = new JButton("Resign");
@@ -48,5 +48,16 @@ public class View {
 		frame2.pack();
 		frame1.setVisible(true);
 		frame2.setVisible(true);
+	}
+	
+	public void playerChange() {
+		if(header1.getText() == "white player - make your move") {
+			header1.setText("white player - wait to move");
+			header2.setText("Black player - make your move");
+		}else {
+			header1.setText("white player - make your move");
+			header2.setText("Black player - wait to move");
+		}
+		return;
 	}
 }

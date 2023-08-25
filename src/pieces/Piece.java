@@ -24,7 +24,7 @@ public class Piece {
 		ps.add(this);
 	}
 	
-	public void move(int xp, int yp) {
+	public boolean move(int xp, int yp) {
 		if(valid(xp, yp)) {
 			for(Piece p: ps) {
 				if(p.getXp()==xp&&p.getYp()==yp) {
@@ -37,10 +37,11 @@ public class Piece {
 			this.yp=yp;
 			x=xp*64;
 			y=yp*64;
+			return true;
 		}else {
 			x=this.xp*64;
 			y=this.yp*64;
-			return;
+			return false;
 		}
 	}
 	
@@ -48,13 +49,13 @@ public class Piece {
 		return true;
 	}
 	
-	public Boolean isPiece(int x, int y) {
+	public Piece isPiece(int x, int y) {
 		for(Piece p : ps) {
 			if(p.getXp()==x && p.getYp()==y) {
-				return true;
+				return p;
 			}
 		}
-		return false;
+		return null;
 	}
 	
 	public Boolean isPieceWhite(int x, int y) {
@@ -67,17 +68,18 @@ public class Piece {
 		return false;
 	}
 	
-	public boolean checkPath(int [] location, int [] end, int [] direction) {
+	public Piece checkPath(int [] location, int [] end, int [] direction) {
 		location[0] += direction[0];
 		location[1] += direction[1];
 		while(!Arrays.equals(location, end)) {
-			if(isPiece(location[0],location[1])) {
-				return false;
+			Piece p = isPiece(location[0],location[1]);
+			if(p!=null) {
+				return p;
 			}
 			location[0] += direction[0];
 			location[1] += direction[1];
 		}
-		return true;
+		return null;
 	}
 	
 	public void kill() {ps.remove(this);}

@@ -12,9 +12,34 @@ public class Pawn extends Piece{
 	}
 	
 	@Override
+	public void move(int xp, int yp) {
+		if(valid(xp, yp)) {
+			for(Piece p: ps) {
+				if(p.getXp()==xp&&p.getYp()==yp) {
+					System.out.println("killing "+p.getName());
+					p.kill();
+					break;
+				}
+			}
+			this.xp=xp;
+			this.yp=yp;
+			x=xp*64;
+			y=yp*64;
+			if(isWhite && yp==0)
+				promote();
+			else if(!isWhite && yp==7)
+				promote();
+		}else {
+			x=this.xp*64;
+			y=this.yp*64;
+			return;
+		}
+	}
+	
+	@Override
 	public boolean valid(int xp, int yp) {
 		if(this.xp==xp) {
-			if((!isPiece(this.xp,this.yp-1) && isWhite) || (!isPiece(this.xp,this.yp+1) && !isWhite)) {
+			if((isPiece(this.xp,this.yp-1)==null && isWhite) || (isPiece(this.xp,this.yp+1)==null && !isWhite)) {
 				int dif = yp-this.yp;
 				if((dif<0 && isWhite) || (dif>0 && !isWhite)) {
 					dif = Math.abs(dif);
@@ -28,12 +53,17 @@ public class Pawn extends Piece{
 			int dif = yp-this.yp;
 			if((dif<0 && isWhite) || (dif>0 && !isWhite)) {
 				dif = Math.abs(dif);
-				if((dif==1 && isPiece(xp,yp)) && (isPieceWhite(xp,yp) != isWhite)) {
+				if((dif==1 && isPiece(xp,yp)!=null) && (isPieceWhite(xp,yp) != isWhite)) {
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+	
+	public void promote() {
+		new Queen(this.xp,this.yp,this.isWhite,this.ps);
+		this.kill();
 	}
 	
 	@Override

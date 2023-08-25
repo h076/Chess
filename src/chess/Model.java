@@ -19,11 +19,16 @@ public class Model {
 	LinkedList<Piece> ps = new LinkedList<>();
 	Board[] bs = new Board[2];
 	Piece selectedPiece = null;
-	int currentPlayer;
+	boolean currentPlayer;
+	Piece whiteKing;
+	Piece blackKing;
 	
-	public Board[] initialise() {
+	public Board[] initialise(View V) {
+		// save reference to view
+		this.view = V;
+		
 		// set white as initial player
-		this.currentPlayer = 1;
+		this.currentPlayer = true;
 		
 		// set white pieces
 		new Rook(0,7,true,ps);
@@ -51,29 +56,27 @@ public class Model {
 		for(int x=0; x<8; x++)
 			new Pawn(x,1,false,ps);
 		
-		//test pieces
-		//new Pawn(0,0,false,ps);
-		//new Pawn(0,7,true,ps);
-		
 		//initialise the boards
-		bs[0] = new Board(ps, false);
-		bs[1] = new Board(ps, true);
+		bs[0] = new Board(ps, true);
+		bs[1] = new Board(ps, false);
 		
 		for(Board b : bs) {
 			b.addMouseMotionListener(new MouseMotionListener() {
 				@Override
 				public void mouseDragged(MouseEvent e) {
-					if(selectedPiece!=null) {
-						if(b.isInverted()) {
-							selectedPiece.setX(e.getX()-32);
-							selectedPiece.setY(invertY(e.getY())+32);
-							if((invertY(e.getY())+32)%64 == 0)
-								return;
-						}else {
-							selectedPiece.setX(e.getX()-32);
-							selectedPiece.setY(e.getY()-32);
+					if(b.white()==currentPlayer) {
+						if(selectedPiece!=null && selectedPiece.white()==currentPlayer) {
+							if(b.isInverted()) {
+								selectedPiece.setX(e.getX()-32);
+								selectedPiece.setY(invertY(e.getY())+32);
+								if((invertY(e.getY())+32)%64 == 0)
+									return;
+							}else {
+								selectedPiece.setX(e.getX()-32);
+								selectedPiece.setY(e.getY()-32);
+							}
+							b.repaint();
 						}
-						b.repaint();
 					}
 				}
 
@@ -95,13 +98,21 @@ public class Model {
 				
 				@Override
 				public void mouseReleased(MouseEvent e) {
-					if(selectedPiece!=null) {
-						if(b.isInverted()) {
-							System.out.println("moved to postion: "+(e.getX()/64)+","+(e.getY()/64));
-							selectedPiece.move(e.getX()/64, invertY(e.getY())/64);
-						}else {
-							System.out.println("moved to postion: "+(e.getX()/64)+","+(invertY(e.getY())/64));
-							selectedPiece.move(e.getX()/64, e.getY()/64);
+					if(b.white()==currentPlayer) {
+						if(selectedPiece!=null && selectedPiece.white()==currentPlayer) {
+							if(b.isInverted()) {
+								System.out.println("moved to postion: "+(e.getX()/64)+","+(e.getY()/64));
+								if(selectedPiece.move(e.getX()/64, invertY(e.getY())/64)==true) {
+									currentPlayer = !currentPlayer;
+									view.playerChange();
+								}
+							}else {
+								System.out.println("moved to postion: "+(e.getX()/64)+","+(invertY(e.getY())/64));
+								if(selectedPiece.move(e.getX()/64, e.getY()/64)==true) {
+									currentPlayer = !currentPlayer;
+									view.playerChange();
+								}
+							}
 						}
 						bs[0].repaint();
 						bs[1].repaint();

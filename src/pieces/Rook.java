@@ -28,10 +28,10 @@ public class Rook extends Piece{
 		
 		for (int [] d : directions) {
 			if(Arrays.equals(d, dir)) {
-				if(checkPath(location,end,dir)) {
-					if(isPiece(xp,yp) && (isPieceWhite(xp,yp) != isWhite))
+				if(checkPath(location,end,dir)==null) {
+					if(isPiece(xp,yp) != null && isPieceWhite(xp,yp) != isWhite)
 						return true;
-					else if(!isPiece(xp,yp))
+					else if(isPiece(xp,yp)==null)
 						return true;
 				}
 			}

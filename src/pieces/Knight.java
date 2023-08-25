@@ -18,9 +18,9 @@ public class Knight extends Piece{
 		int ydif = yp - this.yp;
 		for(int [] m : moves) {
 			if(xdif==m[0] && ydif==m[1]) {
-				if(isPiece(xp,yp) && (isPieceWhite(xp,yp) != isWhite))
+				if(isPiece(xp,yp) != null && isPieceWhite(xp,yp) != isWhite)
 					return true;
-				else if(!isPiece(xp,yp))
+				else if(isPiece(xp,yp)==null)
 					return true;
 			}
 		}
