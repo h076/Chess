@@ -35,7 +35,7 @@ public class Model {
 		new Knight(1,7,true,ps);
 		new Bishop(2,7,true,ps);
 		new Queen(3,7,true,ps);
-		new King(4,7,true,ps);
+		this.whiteKing = new King(4,7,true,ps);
 		new Bishop(5,7,true,ps);
 		new Knight(6,7,true,ps);
 		new Rook(7,7,true,ps);
@@ -48,7 +48,7 @@ public class Model {
 		new Knight(1,0,false,ps);
 		new Bishop(2,0,false,ps);
 		new Queen(3,0,false,ps);
-		new King(4,0,false,ps);
+		this.blackKing = new King(4,0,false,ps);
 		new Bishop(5,0,false,ps);
 		new Knight(6,0,false,ps);
 		new Rook(7,0,false,ps);
@@ -103,14 +103,12 @@ public class Model {
 							if(b.isInverted()) {
 								System.out.println("moved to postion: "+(e.getX()/64)+","+(e.getY()/64));
 								if(selectedPiece.move(e.getX()/64, invertY(e.getY())/64)==true) {
-									currentPlayer = !currentPlayer;
-									view.playerChange();
+									handleMove();
 								}
 							}else {
 								System.out.println("moved to postion: "+(e.getX()/64)+","+(invertY(e.getY())/64));
 								if(selectedPiece.move(e.getX()/64, e.getY()/64)==true) {
-									currentPlayer = !currentPlayer;
-									view.playerChange();
+									handleMove();
 								}
 							}
 						}
@@ -128,6 +126,26 @@ public class Model {
 			});
 		}
 		return bs;
+	}
+	
+	public void handleMove() {
+		Piece checker;
+		
+		// check function called on the opposite king to see if move has caused them to be checked
+		if(currentPlayer) 
+			checker = blackKing.Check(blackKing.getXp(), blackKing.getYp());
+		else
+			checker = whiteKing.Check(whiteKing.getXp(), whiteKing.getYp());
+		
+		if(checker!=null)
+			// look for mate
+			System.out.println("checked by "+checker.getName()+" and colour is "+checker.white());
+		else
+			// continue
+			System.out.println("no check");
+		
+		currentPlayer = !currentPlayer;
+		view.playerChange();
 	}
 	
 	public Piece getPiece(int x, int y) {

@@ -98,4 +98,6 @@ public class Piece {
 	
 	public void setX(int x) {this.x=x;}
 	public void setY(int y) {this.y=y;}
+	
+	public Piece Check(int x, int y) {return null;};
 }
