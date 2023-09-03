@@ -65,7 +65,7 @@ public class King extends Piece{
 					}
 					if(p.getName()=="Queen" && p.white()!=isWhite)
 						return p;
-					if(p.getName()=="Bishop" && p.white()!=isWhite)
+					if(p.getName()=="Rook" && p.white()!=isWhite)
 						return p;
 					break;
 				}else {

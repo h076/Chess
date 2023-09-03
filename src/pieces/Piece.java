@@ -14,6 +14,8 @@ public class Piece {
 	boolean isWhite;
 	LinkedList<Piece> ps;
 	
+	int [][] directions = {{1,0},{0,1},{-1,0},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1}};
+	
 	public Piece(int xp, int yp, boolean isWhite, LinkedList<Piece> ps) {
 		this.xp = xp;
 		this.yp = yp;
@@ -47,6 +49,45 @@ public class Piece {
 	
 	public boolean valid(int xp, int yp) {
 		return true;
+	}
+	
+	public boolean pin() {
+		int tempX;
+		int tempY;
+		Piece p;
+		for(int [] d : directions) {
+			tempX = this.xp+d[0];
+			tempY = this.yp+d[1];
+			while((-1<tempX && tempX<8) && (-1<tempY && tempY<8)) {
+				p = isPiece(tempX, tempY);
+				if(p.getName()=="King" && p.white()==this.isWhite) {
+					int [] backwards = {d[0]*-1,d[1]*-1};
+					tempX = this.xp+backwards[0];
+					tempY = this.yp+backwards[1];
+					while((-1<tempX && tempX<8) && (-1<tempY && tempY<8)) {
+						p = isPiece(tempX, tempY);
+						if(p!=null) {
+							String name = p.getName();
+							boolean col = p.white();
+							if(name=="Rook" && col!=this.isWhite && (d[0]==0 || d[1]==0)) {
+								return true;
+							}else if(name=="Queen" && col!=this.isWhite && (d[0]==0 || d[1]==0)) {
+								return true;
+							}else if(name=="bishop" && col!=this.isWhite && d[0]!=0 && d[1]!=0) {
+								return true;
+							}
+							return false;
+						}else {
+							tempX+=backwards[0];
+							tempY+=backwards[1];
+						}
+					}
+				}
+				tempX+=d[0];
+				tempY+=d[1];
+			}
+		}
+		return false;
 	}
 	
 	public Piece isPiece(int x, int y) {
